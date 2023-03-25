@@ -1,10 +1,9 @@
-from django import forms
+from django.forms import ModelForm
+
 from .models import Post
 
 
-class PostForm(forms.ModelForm):
-    class Meta(forms.ModelForm.Meta):
-        # укажем модель, с которой связана создаваемая форма
+class PostForm(ModelForm):
+    class Meta:
         model = Post
-        # укажем, какие поля должны быть видны в форме и в каком порядке
         fields = ('text', 'group')
