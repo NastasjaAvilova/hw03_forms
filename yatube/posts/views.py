@@ -45,3 +45,10 @@ def post_detail(request, post_id):
     context = {
     }
     return render(request, 'posts/post_detail.html', context) 
+
+
+
+def post_create()
+
+
+def post_edit()
