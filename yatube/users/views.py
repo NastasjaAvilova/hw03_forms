@@ -1,9 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-# users/views.py
-# Импортируем CreateView, чтобы создать ему наследника
 from django.views.generic import CreateView
 
 # Функция reverse_lazy позволяет получить URL по параметрам функции path()
