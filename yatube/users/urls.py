@@ -1,7 +1,7 @@
 # users/urls.py
 
 # Импортируем из приложения django.contrib.auth нужный view-класс
-from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView, PasswordChangeView
 from django.urls import path
 from . import views
 
@@ -19,5 +19,15 @@ urlpatterns = [
         'login/',
         LoginView.as_view(template_name='users/login.html'),
         name='login'
+    ),
+    path(
+        'password_reset/',
+        PasswordResetView.as_view(),
+        name='password_reset_form'
+    ),
+    path(
+        'password_change/',
+        PasswordChangeView.as_view(),
+        name='password_change_form'
     ),
 ]

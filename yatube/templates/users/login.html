@@ -1,5 +1,3 @@
-# templates/users/login.html
-
 {% extends "base.html" %}
 {% block title %}Войти{% endblock %}
 {% block content %}
@@ -61,8 +59,7 @@
             <button type="submit" class="btn btn-primary">
               Войти
             </button>
-            <!-- Тест на внимательность. Без переопределения шаблона этого адреса
-            не существует. Нужно что-то делать, иначе все упадет -->
+            {# <a href="../password_reset/" class="btn btn-link"> #}
             <a href="{% url 'users:password_reset_form' %}" class="btn btn-link">
               Забыли пароль?
             </a>
@@ -72,4 +69,4 @@
       </div> <!-- card -->
     </div> <!-- col -->
 </div> <!-- row -->
-{% endblock %}
+{% endblock %} 

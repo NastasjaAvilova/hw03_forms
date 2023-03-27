@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
+
 
 from .models import Post, Group, User
 
@@ -18,12 +20,14 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-
-    posts = group.posts.all()[:LAST_POSTS]
+    posts = group.posts.all()
+    paginator = Paginator(posts, LAST_POSTS)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
         'group': group,
-        'posts': posts,
+        'page_obj': page_obj,
     }
     return render(request, 'posts/group_list.html', context)
 
@@ -37,8 +41,15 @@ def only_user_view(request):
 def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
-    # Здесь код запроса к модели и создание словаря контекста
-    context = {'author': author}
+    posts = author.posts.select_related('author').all()
+    page_number = request.GET.get('page')
+    paginator = Paginator(posts, LAST_POSTS)
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'author': author,
+        'page_obj': page_obj,
+        'posts': posts,
+    }
     return render(request, template, context)
 
 
@@ -64,12 +75,16 @@ def post_create(request):
 def post_edit(request, post_id):
     template = 'posts/create_post.html'
     post = get_object_or_404(Post, id=post_id)
-    if request.user != post.author:
-        return redirect('posts:post_detail', post_id)
-    form = PostForm(request.POST or None)
-    if form.is_valid():
-        post.save()
-        return redirect('posts:post_detail', post_id,)
     is_edit = True
-    context = {'form': form, 'is_edit': is_edit}
+    form = PostForm(request.POST or None, instance=post)
+    if post.author != request.user:
+        return redirect('posts:index')
+    if form.is_valid():
+        form.save()
+        return redirect('posts:post_detail', post_id=post.id)
+    context = {
+        'form': form,
+        'is_edit': is_edit,
+        'post': post,
+    }
     return render(request, template, context)
