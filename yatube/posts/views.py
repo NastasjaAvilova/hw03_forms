@@ -13,7 +13,13 @@ LAST_POSTS = 10
 def index(request):
     posts = Post.objects.select_related('author')[:LAST_POSTS]
     template = 'posts/index.html'
-    context = {'posts': posts}
+    paginator = Paginator(posts, LAST_POSTS)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'posts': posts,
+        'page_obj': page_obj,
+    }
 
     return render(request, template, context)
 
