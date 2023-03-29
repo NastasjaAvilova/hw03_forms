@@ -1,14 +1,8 @@
 from django.core.paginator import Paginator
-from django.conf import settings
 
 
-def get_page_context(post_list, request):
-    paginator = Paginator(post_list, settings.CONST)
+def get_page_context(request, posts, last_posts):
+    paginator = Paginator(posts)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return page_obj
-
-
-paginator = Paginator(posts, LAST_POSTS)
-page_number = request.GET.get('page')
-page_obj = paginator.get_page(page_number)
