@@ -5,25 +5,26 @@ from .forms import PostForm
 from .utils import get_page_context
 
 
-last_post = 10
+last_posts = 10
 
 
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.all()
-    context = {'page_obj': get_page_context(posts, request, last_post)}
+    context = {'page_obj': get_page_context(posts, request, last_posts)}
 
     return render(request, template, context)
 
 
 def group_posts(request, slug):
+    template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.all()
     context = {
         'group': group,
-        'page_obj': get_page_context(posts, request, last_post),
+        'page_obj': get_page_context(posts, request, last_posts),
     }
-    return render(request, 'posts/group_list.html', context)
+    return render(request, template, context)
 
 
 def only_user_view(request):
@@ -38,7 +39,7 @@ def profile(request, username):
     posts = author.posts.select_related('author').all()
     context = {
         'author': author,
-        'page_obj': get_page_context(posts, request, last_post),
+        'page_obj': get_page_context(posts, request, last_posts),
     }
     return render(request, template, context)
 
