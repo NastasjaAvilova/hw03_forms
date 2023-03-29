@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
 from .models import Post, Group, User
 from .forms import PostForm
 from .utils import get_page_context
