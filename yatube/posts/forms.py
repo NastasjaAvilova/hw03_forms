@@ -7,3 +7,4 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text', 'group',)
+        labels = {'text': 'текст поста', 'group': 'группа'}

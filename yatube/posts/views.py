@@ -1,9 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-
-
 from .models import Post, Group, User
-
 from .forms import PostForm
 
 
@@ -11,7 +8,7 @@ LAST_POSTS = 10
 
 
 def index(request):
-    posts = Post.objects.select_related('author')[:LAST_POSTS]
+    posts = Post.objects.select_related('author')
     template = 'posts/index.html'
     paginator = Paginator(posts, LAST_POSTS)
     page_number = request.GET.get('page')
