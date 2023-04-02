@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Group, User
 from .forms import PostForm
 from .utils import get_page_context
+from django.contrib.auth.decorators import login_required
 
 
 last_posts = 10
@@ -49,7 +50,7 @@ def post_detail(request, post_id):
     context = {'post': post}
     return render(request, template, context)
 
-
+@login_required
 def post_create(request):
     template = 'posts/create_post.html'
     form = PostForm(request.POST or None)
@@ -62,19 +63,20 @@ def post_create(request):
     return render(request, template, context)
 
 
+@login_required
 def post_edit(request, post_id):
     template = 'posts/create_post.html'
     post = get_object_or_404(Post, id=post_id)
     is_edit = True
     form = PostForm(request.POST or None, instance=post)
     if post.author != request.user:
-        return redirect('posts:index')
+        return redirect('posts:post_detail', post_id)
     if form.is_valid():
-        form.save()
-        return redirect('posts:post_detail', post_id=post.id)
+        post = form.save()
+        return redirect('posts:post_detail', post_id)
     context = {
         'form': form,
         'is_edit': is_edit,
-        'post': post,
+        'post_id': post_id,
     }
     return render(request, template, context)
