@@ -50,6 +50,7 @@ def post_detail(request, post_id):
     context = {'post': post}
     return render(request, template, context)
 
+
 @login_required
 def post_create(request):
     template = 'posts/create_post.html'
